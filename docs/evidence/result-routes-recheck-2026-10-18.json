@@ -1,0 +1,40 @@
+{
+  "checked_at_kst": "2026-10-18 22:49",
+  "frontend_url": "https://typeup-silk.vercel.app",
+  "browser": "Chrome, previously confirmed test-only account",
+  "http_check": "Separate unauthenticated GET for each path; status and app HTML shell only",
+  "auth_observation": "After login, the home and all result routes displayed a Logout button. The diagnosis route briefly showed authentication checking, then settled.",
+  "production_commit": "Not independently identified from the serving domain",
+  "routes": [
+    {
+      "path": "/diagnosis/result",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "app_html_shell": true,
+      "direct_heading": "진단 결과가 없습니다.",
+      "direct_status": "진단을 완료하면 결과를 확인할 수 있어요.",
+      "reload_heading": "진단 결과가 없습니다.",
+      "reload_status": "진단을 완료하면 결과를 확인할 수 있어요."
+    },
+    {
+      "path": "/study/review/wrong/result",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "app_html_shell": true,
+      "direct_heading": "오답 복습 결과가 없습니다.",
+      "direct_status": "오답 복습을 완료하면 결과를 확인할 수 있어요.",
+      "reload_heading": "오답 복습 결과가 없습니다.",
+      "reload_status": "오답 복습을 완료하면 결과를 확인할 수 있어요."
+    },
+    {
+      "path": "/study/review/weak/result",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "app_html_shell": true,
+      "direct_heading": "약점 학습 보고서가 없습니다.",
+      "direct_status": "완료한 약점 학습을 확인할 수 있어요.",
+      "reload_heading": "약점 학습 보고서가 없습니다.",
+      "reload_status": "완료한 약점 학습을 확인할 수 있어요."
+    }
+  ]
+}
