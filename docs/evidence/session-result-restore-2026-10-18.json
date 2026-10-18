@@ -1,0 +1,29 @@
+{
+  "checked_at_kst": "2026-10-18 22:53",
+  "frontend_url": "https://typeup-silk.vercel.app",
+  "account": "previously confirmed test-only account; no identifier recorded",
+  "read_only_report_list": [
+    {
+      "type": "diagnostic",
+      "displayed_score": "5/20",
+      "displayed_accuracy": "25%",
+      "completed_date": "2026-10-18"
+    },
+    {
+      "type": "weak_learning",
+      "displayed_score": "2/3",
+      "displayed_accuracy": "66.67%",
+      "completed_date": "2026-10-18"
+    }
+  ],
+  "diagnostic_opened_from_report_list": {
+    "session_url_prefix_confirmed": "/mypage/reports/diagnostic/",
+    "nonempty_result_heading": "진단 결과",
+    "visible_sections": ["강점", "우선 연습", "PDF 다운로드"],
+    "same_url_direct_access_and_reload": "unverified: browser selector timed out before a reliable result could be captured"
+  },
+  "wrong_review": "No completed session ID in the read-only report list or existing evidence",
+  "weak_learning": "Completed report listed, but session URL and result screen were not inspected after browser failure",
+  "session_ids_recorded": false,
+  "new_attempts_or_ai_calls": false
+}
