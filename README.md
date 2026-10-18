@@ -403,6 +403,8 @@ Supabase
 | 김세인 | Frontend / UI                   | Figma 기반 화면 구현, React UI, 반응형 화면                                                    |
 | 김태희 | 기획 / 디자인 / Report          | 서비스 기획, 사용자 흐름, TYPEUP 브랜딩, 보고서 템플릿 및 PDF Export                           |
 
+Git 협업 및 개인별 기여 근거: [CONTRIBUTIONS.md](docs/CONTRIBUTIONS.md)
+
 ---
 
 ## 8. 프로젝트 구조
@@ -448,7 +450,7 @@ codysseyfinal/
 ## 9.1 Repository Clone
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sese15260/codysseyfinal.git
 cd codysseyfinal
 ```
 
