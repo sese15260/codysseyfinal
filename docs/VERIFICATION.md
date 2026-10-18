@@ -80,3 +80,17 @@ DB 조회·저장 함수와 AI 제공자 호출은 모두 테스트 대역으로
 - 변경: Vite 앱과 `package.json`이 있는 프로젝트 디렉터리 `frontend/`에 [vercel.json](../frontend/vercel.json)을 추가하고 `/(.*)` → `/index.html` 재작성 1개만 설정했다. Vercel은 [기존 파일을 재작성보다 먼저 제공](https://vercel.com/docs/project-configuration/vercel-json)하므로 빌드된 `/assets/*`는 정적 파일로 남는다. 프런트엔드 API 클라이언트는 `VITE_API_BASE_URL`의 별도 Render 백엔드에 요청하며 Vercel 프로젝트 안에 `/api` 경로는 없다. Vercel 대시보드의 실제 **Root Directory 설정은 저장소에서 확인할 수 없었다**. 배포 전에 `frontend`인지 확인해야 이 파일의 적용을 보장할 수 있다.
 - 로컬 결과: `cd frontend && npm run build` **통과**(Vite 8.3.3, 341개 모듈). `vercel.json` JSON·재작성 값 검사와 `npm exec prettier -- --check vercel.json` **통과**. Vite `npm run preview`에서 `/login`, `/diagnosis/result`, `/study/review/wrong/result`, `/mypage/reports/diagnostic/test-session`은 모두 HTTP 200 및 앱 HTML을 반환했고, 실제 `/assets/*.js`는 HTTP 200·`text/javascript`로 앱 HTML이 아니었다. 이 미리보기 검사는 **Vercel 재작성 적용 여부를 검증하지 않는다**.
 - 배포 후 재검증할 실제 중첩 경로 3개: `/diagnosis/result`, `/study/review/wrong/result`, `/study/review/weak/result`. 각 URL을 직접 열고 새로고침해 HTTP 200과 해당 화면을 확인한다. `/login` 직접 접근도 기존 실패 회귀 검사로 확인한다. **배포·운영 재검증은 실행하지 않았으며 운영 404 해결은 미확인**이다.
+
+## PR #16 병합·운영 배포 후 확인 (2026-10-18 KST)
+
+- [PR #16](https://github.com/sese15260/codysseyfinal/pull/16)의 최신 소스 커밋 `6d4df9342433dad7325faf25efdffc868d92cf2c`에 대해 GitHub Actions `Verification`의 백엔드 테스트·프런트엔드 빌드가 성공했고, 병합 가능 상태를 확인한 뒤 `main`에 병합했다. 병합 커밋은 [`8cb4ee4ec01ba0679f32c1aef3617adef81c8331`](https://github.com/sese15260/codysseyfinal/commit/8cb4ee4ec01ba0679f32c1aef3617adef81c8331)이다.
+- 이 병합 커밋의 [Vercel 배포 상태](https://vercel.com/hyewonlee-hubs-projects/typeup/AFezAp9VCXYH2m2FrVe721XbzdfX)는 GitHub에서 `success`로 확인했다. 운영 주소는 `https://typeup-silk.vercel.app`이다. 운영 도메인이 제공하는 정확한 커밋 식별자는 별도로 확인하지 못했다.
+- 기존 테스트 전용 계정으로 로그인된 Chrome 탭에서 `/diagnosis/result`를 직접 열고 새로고침했다. 두 직후 상태 모두 Vercel 404 화면 대신 앱의 `로그인 정보를 확인하는 중입니다.`가 표시됐고, 인증 복원 완료를 기다려도 결과 화면으로 진행하지 않았다. 따라서 실제 진단 결과 표시와 새로고침 성공은 **미검증**이다. 브라우저 확인이 이 상태에서 실패하여 요청에 따라 추가 브라우저 시도를 중단했다.
+
+| 운영 경로 | 직접 접근 | 새로고침 | 실제 결과 화면 판정 |
+| --- | --- | --- | --- |
+| `/diagnosis/result` | 앱 인증 확인 화면 표시, 결과 미표시 | 앱 인증 확인 화면 표시, 결과 미표시 | **미검증** |
+| `/study/review/wrong/result` | 미실행 | 미실행 | **미검증** |
+| `/study/review/weak/result` | 미실행 | 미실행 | **미검증** |
+
+HTTP 200 또는 SPA 셸 표시만으로 경로 검증을 통과 처리하지 않았다. 세 결과 화면의 직접 접근·새로고침과 운영 도메인의 배포 커밋 대조를 다시 확인해야 한다. AI 캐시 적중·RAG 실행 문맥도 서버 응답·로그 증거가 없어 **미검증**이다. 새 풀이·AI 해설 생성은 실행하지 않았다.
