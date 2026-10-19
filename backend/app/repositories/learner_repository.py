@@ -87,12 +87,7 @@ def update_learner_profile(
     if not profile_updates:
         raise ValueError("At least one profile field must be provided.")
 
-    response = (
-        supabase.table("learners")
-        .update(profile_updates)
-        .eq("id", learner_id)
-        .execute()
-    )
+    response = supabase.table("learners").update(profile_updates).eq("id", learner_id).execute()
 
     if not response.data:
         raise RuntimeError("Learner profile update did not return a row.")

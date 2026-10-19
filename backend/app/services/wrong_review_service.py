@@ -25,7 +25,6 @@ from app.schemas.learning import (
     WrongReviewSubmitResponse,
 )
 
-
 WRONG_REVIEW_MODE = "wrong_review"
 WRONG_REVIEW_ITEM_LIMIT = 20
 

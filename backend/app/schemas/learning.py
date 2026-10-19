@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 from app.schemas.diagnostic import ChoiceLabel
 
-
 LearningTestMode = Literal["general", "vocabulary", "grammar"]
 
 

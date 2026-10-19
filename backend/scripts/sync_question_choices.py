@@ -14,7 +14,6 @@ from typing import Any
 
 from app.db.supabase import supabase
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DIAGNOSTIC_PATH = BASE_DIR / "data" / "bank" / "diagnostic.json"
 PRACTICE_PATH = BASE_DIR / "data" / "bank" / "practice.json"
@@ -41,9 +40,7 @@ def build_expected_choices() -> list[dict[str, Any]]:
         raise SynchronizationError("practice.json must contain a pool object.")
 
     practice_questions = [
-        question
-        for questions in practice_pool.values()
-        for question in questions
+        question for questions in practice_pool.values() for question in questions
     ]
     questions = diagnostic_questions + practice_questions
 
@@ -86,9 +83,7 @@ def build_expected_choices() -> list[dict[str, Any]]:
                     "choice_label": choice_label,
                     "choice_text": options[choice_label],
                     "is_correct": choice_label == answer,
-                    "trap_id": None
-                    if choice_label == answer
-                    else option_traps[choice_label],
+                    "trap_id": None if choice_label == answer else option_traps[choice_label],
                 }
             )
 
@@ -102,16 +97,13 @@ def build_expected_choices() -> list[dict[str, Any]]:
 
 def validate_database_structure(question_ids: list[str]) -> list[dict[str, Any]]:
     """Ensure every target question has exactly one A-D choice row."""
-    question_response = (
-        supabase.table("questions").select("id").in_("id", question_ids).execute()
-    )
+    question_response = supabase.table("questions").select("id").in_("id", question_ids).execute()
     existing_question_ids = {row["id"] for row in question_response.data}
     missing_question_ids = sorted(set(question_ids) - existing_question_ids)
 
     if missing_question_ids:
         raise SynchronizationError(
-            "Target questions are missing from the database: "
-            + ", ".join(missing_question_ids)
+            "Target questions are missing from the database: " + ", ".join(missing_question_ids)
         )
 
     choices_response = (
@@ -154,8 +146,7 @@ def get_changes(
 ) -> list[tuple[dict[str, Any], list[str]]]:
     """Return expected payloads whose synchronized fields differ from the DB."""
     database_by_key = {
-        (choice["question_id"], choice["choice_label"]): choice
-        for choice in database_choices
+        (choice["question_id"], choice["choice_label"]): choice for choice in database_choices
     }
     changes: list[tuple[dict[str, Any], list[str]]] = []
 
@@ -163,9 +154,7 @@ def get_changes(
         key = (expected["question_id"], expected["choice_label"])
         database_choice = database_by_key.get(key)
         if database_choice is None:
-            raise SynchronizationError(
-                f"{key[0]} / {key[1]}: expected database row is missing."
-            )
+            raise SynchronizationError(f"{key[0]} / {key[1]}: expected database row is missing.")
 
         changed_fields = [
             field
@@ -184,7 +173,7 @@ def print_change_summary(
 ) -> None:
     """Print a concise difference summary without exposing full choice text."""
     affected_questions = {choice["question_id"] for choice, _ in changes}
-    print(f"target choices: 324")
+    print("target choices: 324")
     print(f"changes required: {len(changes)}")
     print(f"already matching: {324 - len(changes)}")
     print(f"affected questions: {len(affected_questions)}")

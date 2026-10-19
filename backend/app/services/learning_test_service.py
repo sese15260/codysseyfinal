@@ -3,17 +3,17 @@
 import random
 
 from app.repositories.learning_repository import (
+    LearningSessionQuestion,
     complete_learning_session,
     create_learning_session,
     create_learning_session_questions,
     create_learning_test_attempts,
     get_learning_session,
     get_learning_session_question_ids,
-    LearningSessionQuestion,
 )
 from app.repositories.question_repository import (
-    get_practice_questions_grading_data,
     get_practice_questions_by_area_codes,
+    get_practice_questions_grading_data,
     get_public_questions_by_ids,
 )
 from app.schemas.learning import (
@@ -24,7 +24,6 @@ from app.schemas.learning import (
     LearningTestSubmitResponse,
 )
 
-
 LEARNING_TEST_MODE_TO_DB_MODE = {
     "general": "daily_general",
     "vocabulary": "daily_vocabulary",
@@ -32,8 +31,7 @@ LEARNING_TEST_MODE_TO_DB_MODE = {
 }
 
 LEARNING_TEST_DB_MODE_TO_API_MODE = {
-    db_mode: api_mode
-    for api_mode, db_mode in LEARNING_TEST_MODE_TO_DB_MODE.items()
+    db_mode: api_mode for api_mode, db_mode in LEARNING_TEST_MODE_TO_DB_MODE.items()
 }
 
 LEARNING_TEST_MODE_TO_AREA_CODES = {
@@ -91,19 +89,15 @@ def get_learning_test_items(
             assignments=assignments,
         )
 
-    candidates = get_practice_questions_by_area_codes(
-        LEARNING_TEST_MODE_TO_AREA_CODES[api_mode]
-    )
+    candidates = get_practice_questions_by_area_codes(LEARNING_TEST_MODE_TO_AREA_CODES[api_mode])
 
     if len(candidates) < LEARNING_TEST_ITEM_LIMIT:
         raise RuntimeError(
-            "Not enough practice questions to create a learning test for mode: "
-            f"{api_mode}"
+            f"Not enough practice questions to create a learning test for mode: {api_mode}"
         )
 
     question_ids = [
-        question["id"]
-        for question in random.sample(candidates, k=LEARNING_TEST_ITEM_LIMIT)
+        question["id"] for question in random.sample(candidates, k=LEARNING_TEST_ITEM_LIMIT)
     ]
 
     try:
@@ -150,9 +144,7 @@ def submit_learning_test(
         raise ValueError("Learning test answers must not be empty.")
 
     if len(answers) != LEARNING_TEST_ITEM_LIMIT:
-        raise ValueError(
-            f"Learning test requires exactly {LEARNING_TEST_ITEM_LIMIT} answers."
-        )
+        raise ValueError(f"Learning test requires exactly {LEARNING_TEST_ITEM_LIMIT} answers.")
 
     submitted_question_ids = [answer.question_id for answer in answers]
     if len(submitted_question_ids) != len(set(submitted_question_ids)):

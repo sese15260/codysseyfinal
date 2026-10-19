@@ -29,11 +29,7 @@ def retrieve_explanation_context(attempt: OwnedQuestionAttempt) -> dict[str, Any
         key=lambda choice: choice["choice_label"],
     )
     selected_choice = next(
-        (
-            choice
-            for choice in choices
-            if choice.get("choice_label") == attempt["selected_choice"]
-        ),
+        (choice for choice in choices if choice.get("choice_label") == attempt["selected_choice"]),
         None,
     )
     correct_choices = [choice for choice in choices if choice.get("is_correct")]

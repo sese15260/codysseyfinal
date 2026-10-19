@@ -80,7 +80,11 @@ def summarize(records: list[dict], urls: list[str], elapsed_seconds: float) -> d
     by_url = {}
     for url in urls:
         rows = [record for record in records if record["url"] == url]
-        successful = [row for row in rows if row["status_code"] is not None and 200 <= row["status_code"] < 300]
+        successful = [
+            row
+            for row in rows
+            if row["status_code"] is not None and 200 <= row["status_code"] < 300
+        ]
         longest_failure_run = 0
         current_failure_run = 0
         for row in rows:
@@ -110,12 +114,27 @@ def summarize(records: list[dict], urls: list[str], elapsed_seconds: float) -> d
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--url", action="append", type=public_url, required=True, help="Public GET URL; repeat for multiple URLs")
+    parser.add_argument(
+        "--url",
+        action="append",
+        type=public_url,
+        required=True,
+        help="Public GET URL; repeat for multiple URLs",
+    )
     parser.add_argument("--duration-seconds", type=positive_seconds, required=True)
     parser.add_argument("--interval-seconds", type=positive_seconds, default=60.0)
     parser.add_argument("--timeout-seconds", type=positive_seconds, default=15.0)
-    parser.add_argument("--prevent-sleep", action="store_true", help="Prevent automatic Windows sleep while this process runs")
-    parser.add_argument("--output", type=Path, required=True, help="New JSONL evidence file; existing files are not overwritten")
+    parser.add_argument(
+        "--prevent-sleep",
+        action="store_true",
+        help="Prevent automatic Windows sleep while this process runs",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        required=True,
+        help="New JSONL evidence file; existing files are not overwritten",
+    )
     args = parser.parse_args()
     if len(set(args.url)) != len(args.url):
         parser.error("duplicate URLs are not allowed")

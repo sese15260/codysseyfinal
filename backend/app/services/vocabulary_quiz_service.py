@@ -25,7 +25,6 @@ from app.schemas.vocabulary import (
     VocabularyQuizSubmitResponse,
 )
 
-
 QUIZ_WORD_LIMIT = 10
 
 
@@ -103,10 +102,7 @@ def start_vocabulary_quiz(learner_id: str) -> VocabularyQuizStartResponse:
     # Build all choices before writing the session so a source-data error does
     # not leave an empty in-progress quiz session behind.
     session_id = create_vocabulary_quiz_session(learner_id)
-    quiz_items = [
-        {"session_id": session_id, **item_template}
-        for item_template in item_templates
-    ]
+    quiz_items = [{"session_id": session_id, **item_template} for item_template in item_templates]
     create_vocabulary_quiz_items(session_id, quiz_items)
     return VocabularyQuizStartResponse(session_id=session_id, total_count=len(quiz_items))
 

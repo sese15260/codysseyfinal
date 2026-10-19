@@ -48,9 +48,7 @@ def get_learning_test_report(
             f"{LEARNING_TEST_ITEM_LIMIT} attempts."
         )
 
-    attempts_by_subtype: dict[str, list[LearningSessionAttemptDetails]] = defaultdict(
-        list
-    )
+    attempts_by_subtype: dict[str, list[LearningSessionAttemptDetails]] = defaultdict(list)
     correct_count = 0
     trap_count_by_id: dict[str, int] = {}
 
@@ -82,9 +80,7 @@ def get_learning_test_report(
         ),
     )
     review_subtypes = ordered_low_to_high[:3]
-    review_subtype_ids = {
-        performance.subtype_id for performance in review_subtypes
-    }
+    review_subtype_ids = {performance.subtype_id for performance in review_subtypes}
     strengths = [
         performance
         for performance in sorted(
@@ -140,9 +136,7 @@ def _build_subtype_performances(
             raise RuntimeError("Learning test subtype taxonomy is incomplete.")
 
         attempted_count = len(attempts)
-        subtype_correct_count = sum(
-            attempt["is_correct"] is True for attempt in attempts
-        )
+        subtype_correct_count = sum(attempt["is_correct"] is True for attempt in attempts)
         performances.append(
             LearningTestSubtypePerformanceResponse(
                 subtype_id=subtype_id,

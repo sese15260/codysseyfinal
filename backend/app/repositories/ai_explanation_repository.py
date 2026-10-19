@@ -28,10 +28,7 @@ def get_owned_question_attempt(
     """Return one attempt only when it belongs to the requesting learner."""
     response = (
         supabase.table("question_attempts")
-        .select(
-            "id, learner_id, question_id, subtype_id, selected_choice, "
-            "is_correct, trap_id"
-        )
+        .select("id, learner_id, question_id, subtype_id, selected_choice, is_correct, trap_id")
         .eq("id", attempt_id)
         .eq("learner_id", learner_id)
         .limit(1)
@@ -74,11 +71,7 @@ def get_subtype_with_knowledge(subtype_id: str) -> dict[str, Any] | None:
 def get_trap(trap_id: str) -> dict[str, Any] | None:
     """Return the instructor-defined trap details for an incorrect attempt."""
     response = (
-        supabase.table("traps")
-        .select("id, name, description")
-        .eq("id", trap_id)
-        .limit(1)
-        .execute()
+        supabase.table("traps").select("id, name, description").eq("id", trap_id).limit(1).execute()
     )
     return response.data[0] if response.data else None
 

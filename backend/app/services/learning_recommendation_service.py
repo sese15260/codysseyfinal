@@ -15,7 +15,6 @@ from app.schemas.learning import (
     LearningStrengthItemResponse,
 )
 
-
 MIN_ATTEMPTS_FOR_CONFIDENCE = 2
 RECENT_ATTEMPT_WINDOW = 3
 MAX_RECOMMENDATIONS = 3
@@ -70,9 +69,7 @@ def _subtype_stat(
     wrong_count = total_attempts - correct_count
     accuracy = round(correct_count / total_attempts * 100, 2)
     recent_attempts = newest_first[:RECENT_ATTEMPT_WINDOW]
-    recent_wrong_count = sum(
-        attempt["is_correct"] is False for attempt in recent_attempts
-    )
+    recent_wrong_count = sum(attempt["is_correct"] is False for attempt in recent_attempts)
     recent_wrong_streak = 0
     for attempt in recent_attempts:
         if attempt["is_correct"]:
@@ -109,10 +106,7 @@ def _subtype_stat(
 
 
 def _has_complete_taxonomy(stat: dict[str, Any]) -> bool:
-    return all(
-        stat[key]
-        for key in ("subtype_id", "subtype_name", "type_id", "type_name")
-    )
+    return all(stat[key] for key in ("subtype_id", "subtype_name", "type_id", "type_name"))
 
 
 def _recommendation_reasons(stat: dict[str, Any]) -> list[str]:
@@ -120,9 +114,7 @@ def _recommendation_reasons(stat: dict[str, Any]) -> list[str]:
     if stat["recent_wrong_streak"] >= 2:
         reasons.append(f"최근 {stat['recent_wrong_streak']}회 연속 오답")
     elif stat["recent_wrong_count"] >= 2:
-        reasons.append(
-            f"최근 {RECENT_ATTEMPT_WINDOW}회 중 {stat['recent_wrong_count']}회 오답"
-        )
+        reasons.append(f"최근 {RECENT_ATTEMPT_WINDOW}회 중 {stat['recent_wrong_count']}회 오답")
     elif not stat["last_is_correct"]:
         reasons.append("가장 최근 풀이가 오답")
     reasons.append(f"누적 정답률 {stat['accuracy']:.2f}%")
@@ -142,26 +134,19 @@ def get_learning_recommendations(learner_id: str) -> LearningRecommendationsResp
             attempts_by_subtype[subtype_id].append(attempt)
 
     stats = [
-        _subtype_stat(subtype_id, attempts)
-        for subtype_id, attempts in attempts_by_subtype.items()
+        _subtype_stat(subtype_id, attempts) for subtype_id, attempts in attempts_by_subtype.items()
     ]
     complete_stats = [stat for stat in stats if _has_complete_taxonomy(stat)]
     confident_stats = [
-        stat
-        for stat in complete_stats
-        if stat["total_attempts"] >= MIN_ATTEMPTS_FOR_CONFIDENCE
+        stat for stat in complete_stats if stat["total_attempts"] >= MIN_ATTEMPTS_FOR_CONFIDENCE
     ]
 
-    recommendation_candidates = [
-        stat for stat in confident_stats if stat["wrong_count"] > 0
-    ]
+    recommendation_candidates = [stat for stat in confident_stats if stat["wrong_count"] > 0]
     recommendation_candidates.sort(
         key=lambda stat: (-stat["priority_score"], stat["subtype_id"]),
     )
     selected_recommendations = recommendation_candidates[:MAX_RECOMMENDATIONS]
-    selected_subtype_ids = {
-        stat["subtype_id"] for stat in selected_recommendations
-    }
+    selected_subtype_ids = {stat["subtype_id"] for stat in selected_recommendations}
 
     strength_candidates = [
         stat
@@ -181,8 +166,7 @@ def get_learning_recommendations(learner_id: str) -> LearningRecommendationsResp
             **{
                 **stat,
                 "top_traps": [
-                    LearningRecommendationTrapResponse(**trap)
-                    for trap in stat["top_traps"]
+                    LearningRecommendationTrapResponse(**trap) for trap in stat["top_traps"]
                 ],
                 "reason": _recommendation_reasons(stat),
             }

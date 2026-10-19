@@ -2,19 +2,18 @@
 
 from collections import defaultdict
 
+from app.repositories.learner_repository import Learner, update_learner_profile
 from app.repositories.mypage_repository import (
     get_completed_diagnostic_sessions,
     get_completed_learning_sessions,
     get_diagnostic_attempt_results,
     get_learning_attempt_results,
 )
-from app.repositories.learner_repository import Learner, update_learner_profile
 from app.schemas.mypage import (
     MyPageReportItemResponse,
     MyPageReportsResponse,
     ProfileUpdateRequest,
 )
-
 
 LEARNING_MODE_METADATA = {
     "weak_learning": ("weak_learning", "weak_learning"),

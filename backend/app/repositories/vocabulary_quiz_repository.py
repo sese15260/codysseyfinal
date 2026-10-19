@@ -66,10 +66,7 @@ def get_vocabulary_quiz_items(session_id: str) -> list[VocabularyQuizItem]:
     """Return stored item data, including correct meaning for internal grading."""
     response = (
         supabase.table("vocabulary_quiz_items")
-        .select(
-            "word_id, position, correct_meaning, choices, "
-            "vocabulary_words(word)"
-        )
+        .select("word_id, position, correct_meaning, choices, vocabulary_words(word)")
         .eq("session_id", session_id)
         .order("position")
         .execute()

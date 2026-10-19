@@ -4,7 +4,6 @@ from pathlib import Path
 
 from app.db.supabase import supabase
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 TYPES_PATH = BASE_DIR / "data" / "taxonomy" / "types.json"
@@ -35,15 +34,17 @@ def build_seed_data():
     types = []
 
     for item in raw_types:
-        types.append({
-            "id": item["id"],
-            "name": item["name"],
-            "description": None,
-            "group_code": item.get("group"),
-            "area_code": item.get("area"),
-            "weight": item.get("weight"),
-            "rule": item.get("rule"),
-        })
+        types.append(
+            {
+                "id": item["id"],
+                "name": item["name"],
+                "description": None,
+                "group_code": item.get("group"),
+                "area_code": item.get("area"),
+                "weight": item.get("weight"),
+                "rule": item.get("rule"),
+            }
+        )
 
     # -----------------------------
     # subtypes
@@ -52,12 +53,14 @@ def build_seed_data():
 
     for type_item in raw_types:
         for subtype in type_item.get("subtypes", []):
-            subtypes.append({
-                "id": subtype["id"],
-                "type_id": type_item["id"],
-                "name": subtype["name"],
-                "description": None,
-            })
+            subtypes.append(
+                {
+                    "id": subtype["id"],
+                    "type_id": type_item["id"],
+                    "name": subtype["name"],
+                    "description": None,
+                }
+            )
 
     # -----------------------------
     # subtype specs
@@ -65,38 +68,37 @@ def build_seed_data():
     subtype_specs = []
 
     for subtype_id, spec in raw_specs.items():
-        subtype_specs.append({
-            "subtype_id": subtype_id,
-            "answer_rule": spec.get("answer_rule"),
-            "cues": spec.get("cues", []),
-            "judgment": spec.get("judgment"),
-            "scope": spec.get("scope"),
-            "option_pattern": spec.get("option_pattern"),
-            "difficulty_default": spec.get("difficulty_default"),
-            "distractors": spec.get("distractors", []),
-            "vocab": spec.get("vocab"),
-            "example_item": spec.get("example_item"),
-            "notes": spec.get("notes"),
-        })
+        subtype_specs.append(
+            {
+                "subtype_id": subtype_id,
+                "answer_rule": spec.get("answer_rule"),
+                "cues": spec.get("cues", []),
+                "judgment": spec.get("judgment"),
+                "scope": spec.get("scope"),
+                "option_pattern": spec.get("option_pattern"),
+                "difficulty_default": spec.get("difficulty_default"),
+                "distractors": spec.get("distractors", []),
+                "vocab": spec.get("vocab"),
+                "example_item": spec.get("example_item"),
+                "notes": spec.get("notes"),
+            }
+        )
 
     # -----------------------------
     # traps
     # -----------------------------
-    trap_values = (
-        types_data
-        .get("item_attributes", {})
-        .get("traps", {})
-        .get("values", {})
-    )
+    trap_values = types_data.get("item_attributes", {}).get("traps", {}).get("values", {})
 
     traps = []
 
     for trap_id, trap_name in trap_values.items():
-        traps.append({
-            "id": trap_id,
-            "name": trap_name,
-            "description": None,
-        })
+        traps.append(
+            {
+                "id": trap_id,
+                "name": trap_name,
+                "description": None,
+            }
+        )
 
     # -----------------------------
     # practice 펼치기
@@ -114,22 +116,20 @@ def build_seed_data():
     questions = []
 
     for question in all_questions:
-        questions.append({
-            "id": question["id"],
-            "subtype_id": question["subtype_id"],
-            "question_type": (
-                "diagnostic"
-                if question["id"].endswith("-dg")
-                else "practice"
-            ),
-            "part": "PART 5",
-            "difficulty": question.get("difficulty"),
-            "stem": question["stem"],
-            "explanation": None,
-            "translation": question.get("translation"),
-            "source": question.get("source"),
-            "verified": question.get("verified", False),
-        })
+        questions.append(
+            {
+                "id": question["id"],
+                "subtype_id": question["subtype_id"],
+                "question_type": ("diagnostic" if question["id"].endswith("-dg") else "practice"),
+                "part": "PART 5",
+                "difficulty": question.get("difficulty"),
+                "stem": question["stem"],
+                "explanation": None,
+                "translation": question.get("translation"),
+                "source": question.get("source"),
+                "verified": question.get("verified", False),
+            }
+        )
 
     # -----------------------------
     # choices
@@ -141,13 +141,15 @@ def build_seed_data():
         option_traps = question.get("option_traps", {})
 
         for label, text in question["options"].items():
-            choices.append({
-                "question_id": question["id"],
-                "choice_label": label,
-                "choice_text": text,
-                "is_correct": label == answer,
-                "trap_id": option_traps.get(label),
-            })
+            choices.append(
+                {
+                    "question_id": question["id"],
+                    "choice_label": label,
+                    "choice_text": text,
+                    "is_correct": label == answer,
+                    "trap_id": option_traps.get(label),
+                }
+            )
 
     return {
         "types": types,

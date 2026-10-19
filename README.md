@@ -17,6 +17,7 @@ TYPEUP은 TOEIC Part 5·6 문법 문제를 세부 유형과 오답 함정 단위
 
 - [서비스 아키텍처](docs/ARCHITECTURE.md)
 - [기능·CI 검증 결과](docs/VERIFICATION.md)
+- [코드 스타일·자동 검사](docs/STYLE.md)
 - [안정성 측정 결과](docs/STABILITY.md)
 - [사용자 설문 결과](docs/USER_FEEDBACK.md)
 - [Git 협업·팀원별 기여](docs/CONTRIBUTIONS.md)
@@ -412,6 +413,8 @@ Supabase
 | 김태희 | 기획 / 디자인 / Report          | 서비스 기획, 사용자 흐름, TYPEUP 브랜딩, 보고서 템플릿 및 PDF Export                           |
 
 Git 협업 및 개인별 기여 근거: [CONTRIBUTIONS.md](docs/CONTRIBUTIONS.md)
+
+대표 커밋: 이혜원 [진단 API](https://github.com/sese15260/codysseyfinal/commit/9f30623144d7d5a9f571aac96717cc27a21d6068) · 김세인 [프런트엔드 화면](https://github.com/sese15260/codysseyfinal/commit/a51a4058e0ee03e7b0ae13fda191ad5087769567) · 김태희 [PDF 보고서](https://github.com/sese15260/codysseyfinal/commit/7449d3d793d15b30bb439b713c91e2a240faf727)
 
 ---
 

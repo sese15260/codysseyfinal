@@ -65,8 +65,7 @@ def grade_weak_learning_answer(
 
     if not grading_data["found"]:
         raise ValueError(
-            "Submitted question is missing or is not a practice question: "
-            f"{submission.question_id}"
+            f"Submitted question is missing or is not a practice question: {submission.question_id}"
         )
 
     subtype_id = grading_data["subtype_id"]
@@ -74,8 +73,7 @@ def grade_weak_learning_answer(
 
     if subtype_id is None or correct_choice is None:
         raise RuntimeError(
-            "Practice grading data is incomplete for question: "
-            f"{submission.question_id}"
+            f"Practice grading data is incomplete for question: {submission.question_id}"
         )
 
     is_correct = submission.selected_choice == correct_choice
