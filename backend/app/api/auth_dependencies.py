@@ -2,12 +2,11 @@
 
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from supabase import create_client
 
 from app.core.config import SUPABASE_SECRET_KEY, SUPABASE_URL
 from app.repositories.learner_repository import get_learner_by_auth_user_id
 from app.schemas.auth import CurrentLearnerResponse
-
+from supabase import create_client
 
 bearer_scheme = HTTPBearer(auto_error=False)
 

@@ -16,7 +16,6 @@ from app.schemas.diagnostic import (
 from app.services.diagnostic_report_service import get_diagnostic_report
 from app.services.diagnostic_service import get_diagnostic_items, submit_diagnostic
 
-
 router = APIRouter(prefix="/diagnostic", tags=["diagnostic"])
 
 

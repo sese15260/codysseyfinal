@@ -1,27 +1,21 @@
 """Authenticated endpoints for a learner's vocabulary."""
 
-from fastapi import APIRouter, Depends, HTTPException
 from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.auth_dependencies import get_current_learner
 from app.schemas.auth import CurrentLearnerResponse
 from app.schemas.vocabulary import (
     SavedWordsResponse,
+    TodayWordsResponse,
     VocabularyQuizItemsResponse,
     VocabularyQuizStartResponse,
     VocabularyQuizSubmitRequest,
     VocabularyQuizSubmitResponse,
-    TodayWordsResponse,
     WordMemorizedStatusRequest,
     WordSavedStatusRequest,
     WordStateResponse,
-)
-from app.services.vocabulary_service import (
-    WordNotFoundError,
-    get_saved_words,
-    get_today_words,
-    set_memorized_status,
-    set_saved_status,
 )
 from app.services.vocabulary_quiz_service import (
     NoSavedWordsError,
@@ -30,7 +24,13 @@ from app.services.vocabulary_quiz_service import (
     start_vocabulary_quiz,
     submit_vocabulary_quiz,
 )
-
+from app.services.vocabulary_service import (
+    WordNotFoundError,
+    get_saved_words,
+    get_today_words,
+    set_memorized_status,
+    set_saved_status,
+)
 
 router = APIRouter(prefix="/words", tags=["vocabulary"])
 

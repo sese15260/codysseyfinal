@@ -18,7 +18,6 @@ from app.schemas.diagnostic import (
     DiagnosticSubmitResponse,
 )
 
-
 DEFAULT_DIAGNOSTIC_ITEM_LIMIT = 20
 
 
@@ -68,17 +67,14 @@ def grade_diagnostic_answers(
 
         if not question_data["found"]:
             raise ValueError(
-                "Submitted question is missing or is not a diagnostic question: "
-                f"{question_id}"
+                f"Submitted question is missing or is not a diagnostic question: {question_id}"
             )
 
         subtype_id = question_data["subtype_id"]
         correct_choice = question_data["correct_choice_label"]
 
         if subtype_id is None or correct_choice is None:
-            raise RuntimeError(
-                f"Diagnostic grading data is incomplete for question: {question_id}"
-            )
+            raise RuntimeError(f"Diagnostic grading data is incomplete for question: {question_id}")
 
         is_correct = answer.selected_choice == correct_choice
         trap_id = None

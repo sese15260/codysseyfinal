@@ -7,13 +7,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.api.auth_dependencies import get_current_learner
 from app.schemas.auth import CurrentLearnerResponse
 from app.schemas.learning import (
+    LearningRecommendationsResponse,
     LearningTestItemsResponse,
     LearningTestReportResponse,
     LearningTestStartRequest,
     LearningTestStartResponse,
     LearningTestSubmitRequest,
     LearningTestSubmitResponse,
-    LearningRecommendationsResponse,
     WeakLearningItemResponse,
     WeakLearningReportResponse,
     WeakLearningStartRequest,
@@ -26,26 +26,27 @@ from app.schemas.learning import (
     WrongReviewSubmitRequest,
     WrongReviewSubmitResponse,
 )
-from app.services.weak_learning_service import (
-    get_weak_learning_item,
-    start_weak_learning_session,
-    submit_weak_learning_answer as submit_weak_learning_answer_service,
-)
-from app.services.weak_learning_report_service import get_weak_learning_report
+from app.services.learning_recommendation_service import get_learning_recommendations
+from app.services.learning_test_report_service import get_learning_test_report
 from app.services.learning_test_service import (
     get_learning_test_items,
     start_learning_test_session,
     submit_learning_test,
 )
-from app.services.learning_test_report_service import get_learning_test_report
-from app.services.learning_recommendation_service import get_learning_recommendations
+from app.services.weak_learning_report_service import get_weak_learning_report
+from app.services.weak_learning_service import (
+    get_weak_learning_item,
+    start_weak_learning_session,
+)
+from app.services.weak_learning_service import (
+    submit_weak_learning_answer as submit_weak_learning_answer_service,
+)
 from app.services.wrong_review_service import (
     get_wrong_review_items,
     get_wrong_review_report,
     start_wrong_review,
     submit_wrong_review,
 )
-
 
 router = APIRouter(prefix="/learning", tags=["learning"])
 
@@ -203,9 +204,7 @@ def read_learning_test_items(
             learner_id=current_learner.learner_id,
         )
     except ValueError as error:
-        status_code = (
-            404 if str(error) == "Learning test session not found." else 400
-        )
+        status_code = 404 if str(error) == "Learning test session not found." else 400
         raise HTTPException(status_code=status_code, detail=str(error)) from error
     except RuntimeError as error:
         raise HTTPException(

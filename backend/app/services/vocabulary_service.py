@@ -17,13 +17,12 @@ from app.repositories.vocabulary_repository import (
     update_learner_word_fields,
 )
 from app.schemas.vocabulary import (
-    TodayWordResponse,
-    TodayWordsResponse,
     SavedWordResponse,
     SavedWordsResponse,
+    TodayWordResponse,
+    TodayWordsResponse,
     WordStateResponse,
 )
-
 
 DAILY_WORD_LIMIT = 30
 SEOUL_TIMEZONE = ZoneInfo("Asia/Seoul")
@@ -67,8 +66,7 @@ def get_today_words(learner_id: str) -> TodayWordsResponse:
         candidate_words = [
             word
             for word in get_all_vocabulary_words()
-            if word["id"] not in assigned_word_ids
-            and word["id"] not in memorized_word_ids
+            if word["id"] not in assigned_word_ids and word["id"] not in memorized_word_ids
         ]
         selection_count = min(
             DAILY_WORD_LIMIT - len(visible_word_ids),
@@ -91,12 +89,9 @@ def get_today_words(learner_id: str) -> TodayWordsResponse:
             )
 
     visible_word_ids = visible_word_ids[:DAILY_WORD_LIMIT]
-    words_by_id = {
-        word["id"]: word for word in get_words_by_ids(visible_word_ids)
-    }
+    words_by_id = {word["id"]: word for word in get_words_by_ids(visible_word_ids)}
     states_by_word_id = {
-        state["word_id"]: state
-        for state in get_learner_word_states(learner_id, visible_word_ids)
+        state["word_id"]: state for state in get_learner_word_states(learner_id, visible_word_ids)
     }
 
     words = [
@@ -107,9 +102,7 @@ def get_today_words(learner_id: str) -> TodayWordsResponse:
             example=words_by_id[word_id]["example"],
             difficulty=words_by_id[word_id]["difficulty"],
             is_saved=bool(states_by_word_id.get(word_id, {}).get("is_saved", False)),
-            is_memorized=bool(
-                states_by_word_id.get(word_id, {}).get("is_memorized", False)
-            ),
+            is_memorized=bool(states_by_word_id.get(word_id, {}).get("is_memorized", False)),
         )
         for word_id in visible_word_ids
         if word_id in words_by_id

@@ -19,7 +19,6 @@ from app.services.auth_service import (
     signup,
 )
 
-
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 

@@ -90,29 +90,30 @@ def create_learning_attempt(
     learner_id: str | None = None,
 ) -> int:
     """Store one weak-learning attempt and return its generated ID."""
-    response = supabase.table("question_attempts").insert(
-        {
-            "learner_id": learner_id,
-            "diagnostic_session_id": None,
-            "learning_session_id": learning_session_id,
-            "question_id": result.question_id,
-            "subtype_id": result.subtype_id,
-            "selected_choice": result.selected_choice,
-            "is_correct": result.is_correct,
-            "trap_id": result.trap_id,
-            "context": "weak_learning",
-            "answered_at": datetime.now(timezone.utc).isoformat(),
-        }
-    ).execute()
+    response = (
+        supabase.table("question_attempts")
+        .insert(
+            {
+                "learner_id": learner_id,
+                "diagnostic_session_id": None,
+                "learning_session_id": learning_session_id,
+                "question_id": result.question_id,
+                "subtype_id": result.subtype_id,
+                "selected_choice": result.selected_choice,
+                "is_correct": result.is_correct,
+                "trap_id": result.trap_id,
+                "context": "weak_learning",
+                "answered_at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+        .execute()
+    )
     if not response.data:
         raise RuntimeError("Learning attempt insert did not return an ID.")
 
     inserted_attempt = response.data[0]
     attempt_id = inserted_attempt.get("id")
-    if (
-        not isinstance(attempt_id, int)
-        or inserted_attempt.get("question_id") != result.question_id
-    ):
+    if not isinstance(attempt_id, int) or inserted_attempt.get("question_id") != result.question_id:
         raise RuntimeError("Learning attempt insert returned incomplete data.")
 
     return attempt_id
@@ -250,8 +251,7 @@ def get_learning_session_attempt_details(
     response = (
         supabase.table("question_attempts")
         .select(
-            "question_id, subtype_id, selected_choice, is_correct, trap_id, "
-            "context, answered_at"
+            "question_id, subtype_id, selected_choice, is_correct, trap_id, context, answered_at"
         )
         .eq("learning_session_id", learning_session_id)
         .order("answered_at", desc=True)

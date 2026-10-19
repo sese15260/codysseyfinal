@@ -1,7 +1,5 @@
 """Email signup workflow backed by Supabase Auth and learner profiles."""
 
-from supabase import create_client
-
 from app.core.config import SUPABASE_SECRET_KEY, SUPABASE_URL
 from app.db.supabase import supabase
 from app.repositories.learner_repository import (
@@ -14,6 +12,7 @@ from app.schemas.auth import (
     SignupRequest,
     SignupResponse,
 )
+from supabase import create_client
 
 
 class EmailAlreadyRegisteredError(ValueError):
@@ -107,12 +106,7 @@ def login(submission: LoginRequest) -> LoginResponse:
     access_token = getattr(session, "access_token", None)
     refresh_token = getattr(session, "refresh_token", None)
 
-    if (
-        auth_user is None
-        or auth_user_id is None
-        or access_token is None
-        or refresh_token is None
-    ):
+    if auth_user is None or auth_user_id is None or access_token is None or refresh_token is None:
         raise LoginServiceError("Authentication login returned incomplete data.")
 
     auth_user_id = str(auth_user_id)

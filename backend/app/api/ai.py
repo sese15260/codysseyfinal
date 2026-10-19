@@ -11,7 +11,6 @@ from app.services.ai_explanation_service import (
     get_ai_explanation,
 )
 
-
 router = APIRouter(prefix="/ai", tags=["ai"])
 
 

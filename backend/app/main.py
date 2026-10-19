@@ -7,8 +7,8 @@ from app.api.diagnostic import router as diagnostic_router
 from app.api.learning import router as learning_router
 from app.api.mypage import router as mypage_router
 from app.api.vocabulary import router as vocabulary_router
-from app.db.supabase import supabase
 from app.core.config import ALLOWED_ORIGINS
+from app.db.supabase import supabase
 
 app = FastAPI(
     title="TOEIC AI API",

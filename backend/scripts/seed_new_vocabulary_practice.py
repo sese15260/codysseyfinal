@@ -6,7 +6,6 @@ from pathlib import Path
 
 from app.db.supabase import supabase
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 PRACTICE_PATH = BASE_DIR / "data" / "bank" / "practice.json"
 
@@ -62,8 +61,7 @@ def get_target_questions() -> list[dict]:
     missing_ids = set(TARGET_QUESTION_IDS) - questions_by_id.keys()
     if missing_ids:
         raise RuntimeError(
-            "Expected vocabulary practice questions are missing: "
-            + ", ".join(sorted(missing_ids))
+            "Expected vocabulary practice questions are missing: " + ", ".join(sorted(missing_ids))
         )
 
     if len(questions_by_id) != len(TARGET_QUESTION_IDS):
@@ -77,14 +75,10 @@ def get_target_questions() -> list[dict]:
         trap_labels = set(question.get("option_traps", {}))
 
         if option_labels != EXPECTED_CHOICE_LABELS:
-            raise RuntimeError(
-                f"Question {question['id']} must have exactly A-D choices."
-            )
+            raise RuntimeError(f"Question {question['id']} must have exactly A-D choices.")
 
         if answer not in option_labels:
-            raise RuntimeError(
-                f"Question {question['id']} has an answer outside its choices."
-            )
+            raise RuntimeError(f"Question {question['id']} has an answer outside its choices.")
 
         if trap_labels != option_labels - {answer}:
             raise RuntimeError(
@@ -104,9 +98,7 @@ def build_rows(questions: list[dict]) -> tuple[list[dict], list[dict]]:
             {
                 "id": question["id"],
                 "subtype_id": question["subtype_id"],
-                "question_type": (
-                    "diagnostic" if question["id"].endswith("-dg") else "practice"
-                ),
+                "question_type": ("diagnostic" if question["id"].endswith("-dg") else "practice"),
                 "part": "PART 5",
                 "difficulty": question.get("difficulty"),
                 "stem": question["stem"],
@@ -137,12 +129,7 @@ def build_rows(questions: list[dict]) -> tuple[list[dict], list[dict]]:
 
 def get_existing_question_ids(question_ids: tuple[str, ...]) -> list[str]:
     """Return target question IDs that already exist in Supabase."""
-    response = (
-        supabase.table("questions")
-        .select("id")
-        .in_("id", list(question_ids))
-        .execute()
-    )
+    response = supabase.table("questions").select("id").in_("id", list(question_ids)).execute()
     return sorted(row["id"] for row in (response.data or []))
 
 

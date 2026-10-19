@@ -76,13 +76,7 @@ class ReviewQuestionGradingData(TypedDict):
 
 def subtype_exists(subtype_id: str) -> bool:
     """Return whether a subtype exists in the taxonomy."""
-    response = (
-        supabase.table("subtypes")
-        .select("id")
-        .eq("id", subtype_id)
-        .limit(1)
-        .execute()
-    )
+    response = supabase.table("subtypes").select("id").eq("id", subtype_id).limit(1).execute()
 
     return bool(response.data)
 
@@ -140,10 +134,7 @@ def get_practice_question_grading_data(
     """Return internal grading data for one practice question."""
     response = (
         supabase.table("questions")
-        .select(
-            "id, subtype_id, "
-            "question_choices(choice_label, is_correct, trap_id)"
-        )
+        .select("id, subtype_id, question_choices(choice_label, is_correct, trap_id)")
         .eq("question_type", "practice")
         .eq("id", question_id)
         .limit(1)
@@ -162,11 +153,7 @@ def get_practice_question_grading_data(
     row = response.data[0]
     choices = row.get("question_choices") or []
     correct_choice_label = next(
-        (
-            choice["choice_label"]
-            for choice in choices
-            if choice["is_correct"]
-        ),
+        (choice["choice_label"] for choice in choices if choice["is_correct"]),
         None,
     )
     incorrect_choice_traps = sorted(
@@ -204,10 +191,7 @@ def get_practice_questions_grading_data(
 
     response = (
         supabase.table("questions")
-        .select(
-            "id, subtype_id, "
-            "question_choices(choice_label, is_correct, trap_id)"
-        )
+        .select("id, subtype_id, question_choices(choice_label, is_correct, trap_id)")
         .eq("question_type", "practice")
         .in_("id", question_ids)
         .execute()
@@ -218,11 +202,7 @@ def get_practice_questions_grading_data(
     for row in response.data:
         choices = row.get("question_choices") or []
         correct_choice_label = next(
-            (
-                choice["choice_label"]
-                for choice in choices
-                if choice["is_correct"]
-            ),
+            (choice["choice_label"] for choice in choices if choice["is_correct"]),
             None,
         )
         incorrect_choice_traps = sorted(
@@ -413,10 +393,7 @@ def get_diagnostic_question_grading_data(
 
     response = (
         supabase.table("questions")
-        .select(
-            "id, subtype_id, "
-            "question_choices(choice_label, is_correct, trap_id)"
-        )
+        .select("id, subtype_id, question_choices(choice_label, is_correct, trap_id)")
         .eq("question_type", "diagnostic")
         .in_("id", question_ids)
         .execute()
@@ -427,11 +404,7 @@ def get_diagnostic_question_grading_data(
     for row in response.data:
         choices = row.get("question_choices") or []
         correct_choice_label = next(
-            (
-                choice["choice_label"]
-                for choice in choices
-                if choice["is_correct"]
-            ),
+            (choice["choice_label"] for choice in choices if choice["is_correct"]),
             None,
         )
         incorrect_choice_traps = sorted(
@@ -518,10 +491,7 @@ def get_toeic_questions_grading_data(
 
     response = (
         supabase.table("questions")
-        .select(
-            "id, subtype_id, "
-            "question_choices(choice_label, is_correct, trap_id)"
-        )
+        .select("id, subtype_id, question_choices(choice_label, is_correct, trap_id)")
         .in_("id", question_ids)
         .execute()
     )
@@ -533,11 +503,7 @@ def get_toeic_questions_grading_data(
             "found": True,
             "subtype_id": row["subtype_id"],
             "correct_choice_label": next(
-                (
-                    choice["choice_label"]
-                    for choice in choices
-                    if choice["is_correct"]
-                ),
+                (choice["choice_label"] for choice in choices if choice["is_correct"]),
                 None,
             ),
             "incorrect_choice_traps": sorted(

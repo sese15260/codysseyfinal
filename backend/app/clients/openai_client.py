@@ -50,9 +50,7 @@ def generate_explanation(context: dict[str, Any]) -> str:
                 {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
             ],
         )
-        output_text = (
-            response.choices[0].message.content if response.choices else None
-        )
+        output_text = response.choices[0].message.content if response.choices else None
     except Exception as error:
         raise AIProviderError("AI provider request failed.") from error
 

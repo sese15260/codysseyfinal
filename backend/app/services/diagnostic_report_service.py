@@ -91,9 +91,7 @@ def get_diagnostic_report(
     return {
         "total_count": total_count,
         "correct_count": correct_count,
-        "accuracy": round(correct_count / total_count * 100, 2)
-        if total_count
-        else 0.0,
+        "accuracy": round(correct_count / total_count * 100, 2) if total_count else 0.0,
         "estimated_score": None,
         "strengths": strengths,
         "weaknesses": weaknesses,

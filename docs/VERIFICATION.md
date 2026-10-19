@@ -144,3 +144,11 @@ HTTP 200 또는 SPA 셸 표시만으로 경로 검증을 통과 처리하지 않
 | 오답 복습 | 기존 완료 세션 ID를 확보하지 못함 | 실행하지 않음 | **미검증** |
 
 이번 검증은 마이페이지의 `/mypage/reports/diagnostic/{session_id}`와 `/mypage/reports/weak/{session_id}` 경로에 대한 것이다. 완료 직후 사용하는 `/diagnosis/result`·`/study/review/weak/result`는 탭의 `sessionStorage`에 의존하므로 동일하게 복원된다고 주장하지 않는다. 운영 도메인이 제공한 정확한 배포 커밋도 미확인이다.
+
+## 백엔드 코드 스타일 검증 (2026-10-19)
+
+앞의 코드 스타일 검사 기록 당시에는 백엔드가 범위 밖이었으나, 루트 [`pyproject.toml`](../pyproject.toml)에 Python용 Ruff 규칙을 추가하고 [CI](../.github/workflows/verification.yml)에 백엔드 전체 lint·포맷 검사를 넣었다. 적용 방법은 [스타일 가이드](STYLE.md)에 정리했다.
+
+- Ruff 0.17.1 `ruff check backend`: **통과**.
+- Ruff 0.17.1 `ruff format --check backend`: **54개 파일 통과**.
+- 백엔드 `unittest`: **18개 통과, 실패 0개**.

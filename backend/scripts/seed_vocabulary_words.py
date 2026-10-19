@@ -6,7 +6,6 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 WORDS_PATH = BASE_DIR / "data" / "vocabulary" / "words.json"
 ALLOWED_DIFFICULTIES = {"basic", "intermediate", "advanced"}
@@ -64,11 +63,7 @@ def get_existing_normalized_words() -> set[str]:
     from app.db.supabase import supabase
 
     response = supabase.table("vocabulary_words").select("word").execute()
-    return {
-        row["word"].casefold()
-        for row in response.data
-        if isinstance(row.get("word"), str)
-    }
+    return {row["word"].casefold() for row in response.data if isinstance(row.get("word"), str)}
 
 
 def insert_missing_words(words: list[dict[str, str]]) -> tuple[int, int]:
@@ -76,9 +71,7 @@ def insert_missing_words(words: list[dict[str, str]]) -> tuple[int, int]:
     from app.db.supabase import supabase
 
     existing_words = get_existing_normalized_words()
-    rows_to_insert = [
-        word for word in words if word["word"].casefold() not in existing_words
-    ]
+    rows_to_insert = [word for word in words if word["word"].casefold() not in existing_words]
     skipped_count = len(words) - len(rows_to_insert)
 
     if rows_to_insert:

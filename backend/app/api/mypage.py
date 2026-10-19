@@ -7,7 +7,6 @@ from app.schemas.auth import CurrentLearnerResponse
 from app.schemas.mypage import MyPageReportsResponse, ProfileUpdateRequest
 from app.services.mypage_service import get_my_report_history, update_my_profile
 
-
 router = APIRouter(prefix="/mypage", tags=["mypage"])
 
 
