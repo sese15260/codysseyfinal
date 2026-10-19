@@ -13,6 +13,14 @@ TYPEUP은 TOEIC Part 5·6 문법 문제를 세부 유형과 오답 함정 단위
 
 를 누적 학습 데이터를 기반으로 분석합니다.
 
+## 평가 자료 바로가기
+
+- [서비스 아키텍처](docs/ARCHITECTURE.md)
+- [기능·CI 검증 결과](docs/VERIFICATION.md)
+- [안정성 측정 결과](docs/STABILITY.md)
+- [사용자 설문 결과](docs/USER_FEEDBACK.md)
+- [Git 협업·팀원별 기여](docs/CONTRIBUTIONS.md)
+
 ---
 
 ## 1. 프로젝트 개요
